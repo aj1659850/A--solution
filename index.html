@@ -1,5 +1,7 @@
 <!doctype html>
-<html lang="mr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="mr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>A Solution</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#172033;font-family:Arial,"Noto Sans Devanagari",sans-serif}
@@ -8,8 +10,8 @@ main{max-width:850px;margin:auto;padding:14px}.box{background:white;border:1px s
 h2{font-size:18px;margin:0 0 12px}.nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}.nav button{padding:13px 5px;border-radius:10px;background:#e2e8f0;border:0;font-weight:bold;font-size:14px}.nav button.active{background:#2563eb;color:white}
 input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px;font:inherit;background:white;margin-top:5px}label{display:block;font-size:13px;font-weight:bold;color:#475569;margin-bottom:10px}
 form{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
-button{cursor:pointer;font:inherit}button.primary{border:0;border-radius:9px;background:#2563eb;color:white;padding:12px 14px;font-weight:bold}button.secondary{border:0;border-radius:9px;background:#e2e8f0;padding:10px 12px;font-weight:bold}
-.search{margin:10px 0 12px}.muted{color:#64748b;font-size:13px;line-height:1.5}.results{display:grid;gap:10px}.item{border:1px solid #dbe3ef;border-radius:11px;padding:13px;background:#fff}.item strong{font-size:16px}.tag{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:7px;padding:4px 8px;font-weight:bold;font-size:13px;margin-top:7px}.row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}.hidden{display:none!important}.empty{padding:18px;text-align:center;color:#64748b;background:#f8fafc;border-radius:10px}
+button{cursor:pointer;font:inherit}button.primary{border:0;border-radius:9px;background:#2563eb;color:white;padding:12px 14px;font-weight:bold}button.secondary{border:0;border-radius:9px;background:#e2e8f0;padding:10px 12px;font-weight:bold}button.danger{border:0;border-radius:8px;background:#fee2e2;color:#991b1b;padding:8px 10px;font-size:13px;font-weight:bold}
+.search{margin:10px 0 12px}.muted{color:#64748b;font-size:13px;line-height:1.5}.results{display:grid;gap:10px}.item{border:1px solid #dbe3ef;border-radius:11px;padding:13px;background:#fff}.item strong{font-size:16px}.tag{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:7px;padding:4px 8px;font-weight:bold;font-size:13px;margin-top:7px}.row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}.hidden{display:none!important}.empty{padding:18px;text-align:center;color:#64748b;background:#f8fafc;border-radius:10px}.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:480px){main{padding:10px}.box{padding:13px}.nav button{font-size:12px}}
 </style></head><body>
 <header><h1>A Solution</h1><p>Party • Product • Rate • Unit — खरेदी माहिती सहज शोधा.</p></header>
@@ -17,97 +19,64 @@ button{cursor:pointer;font:inherit}button.primary{border:0;border-radius:9px;bac
 <div class="nav">
 <button class="active" data-tab="byProduct">🔎 Product वरून Party</button>
 <button data-tab="byParty">🏢 Party वरून Product</button>
-<button data-tab="party">＋ Party Add</button>
+<button data-tab="party">＋ Party Add / Edit</button>
 <button data-tab="product">＋ Product + Rate</button>
 </div>
-<section class="box" id="byProduct">
-<h2>Product च्या नावावरून Party शोधा</h2>
+<section class="box" id="byProduct"><h2>Product च्या नावावरून Party शोधा</h2>
 <input id="productQuery" class="search" placeholder="Product नाव टाइप करा… उदा. TNMG Insert">
-<p class="muted">एकाच Product चे नाव शोधल्यावर तो Product देणाऱ्या सर्व Party आणि त्यांचे Rates दिसतील.</p>
-<div id="productResults" class="results"></div>
-</section>
-<section class="box hidden" id="byParty">
-<h2>Party च्या नावावरून Products शोधा</h2>
+<p class="muted">Product शोधल्यावर Party आणि Rate दिसतील. नोंदी Edit/Delete करण्यासाठी खालील नोंदवलेली माहिती वापरा.</p><div id="productResults" class="results"></div></section>
+<section class="box hidden" id="byParty"><h2>Party च्या नावावरून Products शोधा</h2>
 <input id="partyQuery" class="search" placeholder="Party नाव टाइप करा… उदा. ABC Traders">
-<p class="muted">Party शोधल्यावर त्या Party कडून मिळणारे सर्व Products आणि त्यांचे Rates दिसतील.</p>
-<div id="partyResults" class="results"></div>
-</section>
-<section class="box hidden" id="party">
-<h2>नवीन Party Add करा</h2>
-<form id="partyForm">
-<label>Party चे नाव *<input id="pname" required placeholder="उदा. ABC Traders"></label>
+<p class="muted">Party शोधल्यावर त्या Party चे Products आणि Rates दिसतील.</p><div id="partyResults" class="results"></div></section>
+<section class="box hidden" id="party"><h2 id="partyHeading">नवीन Party Add करा</h2>
+<form id="partyForm"><label>Party चे नाव *<input id="pname" required placeholder="उदा. ABC Traders"></label>
 <label>Mobile (ऐच्छिक)<input id="pmobile" placeholder="Mobile number"></label>
-<div><button class="primary">Party Save करा</button></div>
-</form><p class="muted">एकच Party नाव पुन्हा Add होऊ नये म्हणून duplicate तपासले जाईल.</p>
-</section>
-<section class="box hidden" id="product">
-<h2>Party कडून मिळणारा Product आणि Rate Add करा</h2>
-<form id="productForm">
-<label>Party निवडा *<select id="supplier" required><option value="">Party निवडा</option></select></label>
+<div><button class="primary" id="partySave">Party Save करा</button> <button type="button" class="secondary hidden" id="partyCancel">Cancel Edit</button></div></form>
+<p class="muted">जुनी Party बदलण्यासाठी खालील नोंदवलेल्या माहितीतील Edit वापरा.</p></section>
+<section class="box hidden" id="product"><h2 id="productHeading">Product आणि Rate Add करा</h2>
+<form id="productForm"><label>Party निवडा *<select id="supplier" required><option value="">Party निवडा</option></select></label>
 <label>Product चे नाव *<input id="prodname" required placeholder="उदा. TNMG Insert"></label>
 <label>Rate (₹) *<input id="rate" type="number" min="0" step="0.01" required placeholder="उदा. 85.50"></label>
-<label>Unit निवडा *<select id="unit" required><option value="Nos">Nos</option><option value="Kg">Kg</option><option value="Gm">Gm</option><option value="LTRS">LTRS</option><option value="ML">ML</option><option value="Box">Box</option><option value="Set">Set</option><option value="Packet">Packet</option><option value="Meter">Meter</option><option value="Pair">Pair</option><option value="Roll">Roll</option><option value="Ton">Ton</option><option value="Piece">Piece</option><option value="Bundle">Bundle</option><option value="Other">Other / नवीन Unit</option></select></label>
-<label id="customUnitWrap" class="hidden">नवीन Unit नाव *<input id="customUnit" placeholder="उदा. LTRS, MT, Pair"></label>
-<div><button class="primary">Product + Rate Save करा</button></div>
-</form><p class="muted">एकाच Party कडून वेगवेगळे Products आणि प्रत्येकाचे वेगवेगळे Rates नोंदवता येतील.</p>
-</section>
-<section class="box">
-<div class="row"><h2 style="margin:0">नोंदवलेली माहिती</h2><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="primary" id="wordBackupBtn">Word Backup</button><button type="button" class="secondary" id="backupBtn">JSON Backup</button></div></div>
-<p class="muted">Word Backup बटणाने Word मध्ये उघडणारी .doc फाइल मिळेल. JSON Backup हे माहिती Restore करण्यासाठी वापरा. Backup डाउनलोड होत नसेल तर software Chrome browser मध्ये उघडा.</p>
-<label>Backup फाइलमधून माहिती Restore करा (.json)<input id="restoreFile" type="file" accept=".json,application/json"></label>
-<div id="backupStatus" class="muted" role="status"></div>
-<div id="summary" class="results"></div>
-</section>
+<label>Unit निवडा *<select id="unit"><option value="Nos">Nos</option><option value="Kg">Kg</option><option value="Gm">Gm</option><option value="LTRS">LTRS</option><option value="ML">ML</option><option value="Box">Box</option><option value="Set">Set</option><option value="Packet">Packet</option><option value="Meter">Meter</option><option value="Pair">Pair</option><option value="Roll">Roll</option><option value="Ton">Ton</option><option value="Piece">Piece</option><option value="Bundle">Bundle</option><option value="Other">Other / नवीन Unit</option></select></label>
+<label id="customUnitWrap" class="hidden">नवीन Unit नाव *<input id="customUnit" placeholder="उदा. MT, Pair"></label>
+<div><button class="primary" id="productSave">Product + Rate Save करा</button> <button type="button" class="secondary hidden" id="productCancel">Cancel Edit</button></div></form></section>
+<section class="box"><div class="row"><h2 style="margin:0">नोंदवलेली माहिती</h2><div class="actions"><button type="button" class="primary" id="wordBackupBtn">Word Backup</button><button type="button" class="secondary" id="backupBtn">JSON Backup</button></div></div>
+<p class="muted">JSON Backup फाइल माहिती Restore करण्यासाठी वापरा. Backup डाउनलोड करून ठेवा.</p>
+<label>Backup फाइलमधून Restore करा (.json)<input id="restoreFile" type="file" accept=".json,application/json"></label>
+<div id="backupStatus" class="muted" role="status"></div><div id="summary" class="results"></div></section>
 </main>
 <script>
-let parties=[],products=[];
+let parties=[],products=[],editPartyOld=null,editProductIndex=null;
 try{const d=JSON.parse(localStorage.getItem('partyProductRateV1')||'{}');parties=d.parties||[];products=d.products||[]}catch(e){}
 const $=id=>document.getElementById(id);
 function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function persist(){localStorage.setItem('partyProductRateV1',JSON.stringify({parties,products}));render()}
 function tab(id){document.querySelectorAll('main section.box[id]').forEach(x=>x.classList.toggle('hidden',x.id!==id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));render()}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+function editParty(name){const p=parties.find(x=>x.name===name);if(!p)return;editPartyOld=p.name;$('pname').value=p.name;$('pmobile').value=p.mobile||'';$('partyHeading').textContent='Party Edit करा';$('partySave').textContent='Party बदल Save करा';$('partyCancel').classList.remove('hidden');tab('party');}
+function cancelPartyEdit(){editPartyOld=null;$('partyForm').reset();$('partyHeading').textContent='नवीन Party Add करा';$('partySave').textContent='Party Save करा';$('partyCancel').classList.add('hidden')}
+$('partyCancel').onclick=cancelPartyEdit;
+function deleteParty(name){if(!confirm('ही Party आणि तिचे सर्व Products delete करायचे?'))return;parties=parties.filter(p=>p.name!==name);products=products.filter(x=>x.party!==name);persist()}
+function editProduct(index){const x=products[index];if(!x)return;editProductIndex=index;$('supplier').value=x.party;$('prodname').value=x.name;$('rate').value=x.rate;$('unit').value=['Nos','Kg','Gm','LTRS','ML','Box','Set','Packet','Meter','Pair','Roll','Ton','Piece','Bundle'].includes(x.unit)?x.unit:'Other';if($('unit').value==='Other'){$('customUnit').value=x.unit;$('customUnitWrap').classList.remove('hidden')}else $('customUnitWrap').classList.add('hidden');$('productHeading').textContent='Product / Rate Edit करा';$('productSave').textContent='बदल Save करा';$('productCancel').classList.remove('hidden');tab('product');}
+function cancelProductEdit(){editProductIndex=null;$('productForm').reset();$('customUnitWrap').classList.add('hidden');$('productHeading').textContent='Product आणि Rate Add करा';$('productSave').textContent='Product + Rate Save करा';$('productCancel').classList.add('hidden')}
+$('productCancel').onclick=cancelProductEdit;
+function deleteProduct(index){if(!confirm('हा Product नोंद delete करायची?'))return;products.splice(index,1);persist()}
 function render(){
 $('supplier').innerHTML='<option value="">Party निवडा</option>'+parties.map(p=>`<option value="${safe(p.name)}">${safe(p.name)}</option>`).join('');
-const pq=($('productQuery').value||'').trim().toLowerCase();
-const productMatches=products.filter(x=>x.name.toLowerCase().includes(pq));
-$('productResults').innerHTML=productMatches.length?productMatches.map(x=>`<div class="item"><div class="row"><strong>${safe(x.party)}</strong><span class="tag">₹${Number(x.rate).toFixed(2)} / ${safe(x.unit)}</span></div><div style="margin-top:7px">Product: <b>${safe(x.name)}</b></div></div>`).join(''):'<div class="empty">या नावाचा Product सापडला नाही. Product Add केला आहे का ते तपासा.</div>';
-const bq=($('partyQuery').value||'').trim().toLowerCase();
-const partyMatches=parties.filter(p=>p.name.toLowerCase().includes(bq));
-$('partyResults').innerHTML=partyMatches.length?partyMatches.map(p=>{const ps=products.filter(x=>x.party===p.name);return `<div class="item"><strong>${safe(p.name)}</strong>${p.mobile?`<div class="muted">Mobile: ${safe(p.mobile)}</div>`:''}${ps.length?ps.map(x=>`<div class="row" style="border-top:1px solid #e2e8f0;padding-top:8px;margin-top:8px"><span>${safe(x.name)} (${safe(x.unit)})</span><b>₹${Number(x.rate).toFixed(2)}</b></div>`).join(''):'<p class="muted">या Party साठी अजून Product नोंद नाही.</p>'}</div>`}).join(''):'<div class="empty">या नावाची Party सापडली नाही.</div>';
-$('summary').innerHTML=`<div class="item"><strong>${parties.length} Party</strong><div class="muted">एकूण Party नोंद</div></div>`+
-(parties.length?parties.map(p=>{const ps=products.filter(x=>x.party===p.name);return `<div class="item"><strong>${safe(p.name)}</strong>${p.mobile?`<div class="muted">Mobile: ${safe(p.mobile)}</div>`:''}<div class="muted">${ps.length} Product</div>${ps.map(x=>`<div class="row" style="border-top:1px solid #e2e8f0;padding-top:8px;margin-top:8px"><span>${safe(x.name)} (${safe(x.unit)})</span><b>₹${Number(x.rate).toFixed(2)}</b></div>`).join('')||'<p class="muted">अजून Product जोडलेला नाही.</p>'}</div>`}).join(''):'<div class="empty">पहिली Party Add करा.</div>');
+const pq=($('productQuery').value||'').trim().toLowerCase(),productMatches=products.map((x,i)=>({...x,_i:i})).filter(x=>x.name.toLowerCase().includes(pq));
+$('productResults').innerHTML=productMatches.length?productMatches.map(x=>`<div class="item"><div class="row"><strong>${safe(x.party)}</strong><span class="tag">₹${Number(x.rate).toFixed(2)} / ${safe(x.unit)}</span></div><div style="margin-top:7px">Product: <b>${safe(x.name)}</b></div><div class="actions"><button class="secondary" onclick="editProduct(${x._i})">✏️ Rate/Product Edit</button><button class="danger" onclick="deleteProduct(${x._i})">Delete</button></div></div>`).join(''):'<div class="empty">या नावाचा Product सापडला नाही.</div>';
+const bq=($('partyQuery').value||'').trim().toLowerCase(),partyMatches=parties.filter(p=>p.name.toLowerCase().includes(bq));
+$('partyResults').innerHTML=partyMatches.length?partyMatches.map(p=>{const ps=products.map((x,i)=>({...x,_i:i})).filter(x=>x.party===p.name);return `<div class="item"><strong>${safe(p.name)}</strong>${p.mobile?`<div class="muted">Mobile: ${safe(p.mobile)}</div>`:''}<div class="actions"><button class="secondary" onclick="editParty('${safe(p.name).replace(/'/g,'&#39;')}')">✏️ Party Edit</button><button class="danger" onclick="deleteParty('${safe(p.name).replace(/'/g,'&#39;')}')">Delete Party</button></div>${ps.length?ps.map(x=>`<div class="row" style="border-top:1px solid #e2e8f0;padding-top:8px;margin-top:8px"><span>${safe(x.name)} (${safe(x.unit)})</span><b>₹${Number(x.rate).toFixed(2)}</b><button class="secondary" onclick="editProduct(${x._i})">Edit</button></div>`).join(''):'<p class="muted">या Party साठी अजून Product नोंद नाही.</p>'}</div>`}).join(''):'<div class="empty">या नावाची Party सापडली नाही.</div>';
+$('summary').innerHTML=`<div class="item"><strong>${parties.length} Party</strong><div class="muted">एकूण Party नोंद</div></div>`+(parties.length?parties.map(p=>{const ps=products.map((x,i)=>({...x,_i:i})).filter(x=>x.party===p.name);return `<div class="item"><strong>${safe(p.name)}</strong>${p.mobile?`<div class="muted">Mobile: ${safe(p.mobile)}</div>`:''}<div class="actions"><button class="secondary" onclick="editParty('${safe(p.name).replace(/'/g,'&#39;')}')">✏️ Party Edit</button><button class="danger" onclick="deleteParty('${safe(p.name).replace(/'/g,'&#39;')}')">Delete Party</button></div><div class="muted">${ps.length} Product</div>${ps.map(x=>`<div class="row" style="border-top:1px solid #e2e8f0;padding-top:8px;margin-top:8px"><span>${safe(x.name)} (${safe(x.unit)})</span><b>₹${Number(x.rate).toFixed(2)}</b><div class="actions"><button class="secondary" onclick="editProduct(${x._i})">Edit</button><button class="danger" onclick="deleteProduct(${x._i})">Delete</button></div></div>`).join('')||'<p class="muted">अजून Product जोडलेला नाही.</p>'}</div>`}).join(''):'<div class="empty">पहिली Party Add करा.</div>');
 }
 $('productQuery').addEventListener('input',render);$('partyQuery').addEventListener('input',render);
 $('unit').addEventListener('change',()=> $('customUnitWrap').classList.toggle('hidden',$('unit').value!=='Other'));
-$('partyForm').onsubmit=e=>{e.preventDefault();const name=$('pname').value.trim();if(parties.some(p=>p.name.toLowerCase()===name.toLowerCase())){alert('ही Party आधीच Add आहे.');return}parties.push({name,mobile:$('pmobile').value.trim()});e.target.reset();persist();alert('Party Save झाली. आता Product + Rate Add करा.');tab('product')};
-$('productForm').onsubmit=e=>{e.preventDefault();const party=$('supplier').value,name=$('prodname').value.trim(),rate=$('rate').value,unit=$('unit').value==='Other'?$('customUnit').value.trim():$('unit').value;if(!unit){alert('Unit चे नाव टाका.');return}if(!party){alert('आधी Party निवडा.');return}const existing=products.find(x=>x.party===party&&x.name.toLowerCase()===name.toLowerCase());if(existing){if(!confirm('या Party साठी हा Product आधी आहे. जुना Rate बदलायचा?'))return;existing.rate=rate;existing.unit=unit}else products.push({party,name,rate,unit});e.target.reset();$('customUnitWrap').classList.add('hidden');persist();alert('Product, Rate आणि Unit Save झाले.');tab('byProduct')};
-function downloadBackup(){
-  const payload=JSON.stringify({version:1,exportedAt:new Date().toISOString(),parties,products},null,2);
-  const blob=new Blob([payload],{type:'application/json;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='A-Solution-Backup-'+new Date().toISOString().slice(0,10)+'.json';a.style.display='none';document.body.appendChild(a);
-  try{a.click();$('backupStatus').textContent='Backup फाइल तयार केली आहे. Downloads फोल्डर तपासा.';}catch(err){$('backupStatus').textContent='Download सुरू झाले नाही. Software Chrome मध्ये उघडून पुन्हा प्रयत्न करा.';}
-  setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},60000);
-}
+$('partyForm').onsubmit=e=>{e.preventDefault();const name=$('pname').value.trim(),mobile=$('pmobile').value.trim();if(editPartyOld!==null){if(parties.some(p=>p.name.toLowerCase()===name.toLowerCase()&&p.name!==editPartyOld)){alert('हे Party नाव आधीच आहे.');return}const old=editPartyOld;parties=parties.map(p=>p.name===old?{name,mobile}:p);products=products.map(x=>x.party===old?{...x,party:name}:x);cancelPartyEdit();persist();alert('Party बदल Save झाले.')}else{if(parties.some(p=>p.name.toLowerCase()===name.toLowerCase())){alert('ही Party आधीच Add आहे.');return}parties.push({name,mobile});e.target.reset();persist();alert('Party Save झाली.');}tab('byParty')};
+$('productForm').onsubmit=e=>{e.preventDefault();const party=$('supplier').value,name=$('prodname').value.trim(),rate=$('rate').value,unit=$('unit').value==='Other'?$('customUnit').value.trim():$('unit').value;if(!unit){alert('Unit चे नाव टाका.');return}if(!party){alert('आधी Party निवडा.');return}if(editProductIndex!==null){const duplicate=products.some((x,i)=>i!==editProductIndex&&x.party===party&&x.name.toLowerCase()===name.toLowerCase());if(duplicate){alert('या Party साठी हा Product आधीच आहे.');return}products[editProductIndex]={party,name,rate,unit};cancelProductEdit();persist();alert('Product / Rate बदल Save झाले.')}else{const existing=products.find(x=>x.party===party&&x.name.toLowerCase()===name.toLowerCase());if(existing){if(!confirm('या Party साठी हा Product आधी आहे. जुना Rate बदलायचा?'))return;existing.rate=rate;existing.unit=unit}else products.push({party,name,rate,unit});e.target.reset();$('customUnitWrap').classList.add('hidden');persist();alert('Product, Rate आणि Unit Save झाले.')}tab('byProduct')};
+function downloadBackup(){const payload=JSON.stringify({version:1,exportedAt:new Date().toISOString(),parties,products},null,2),blob=new Blob([payload],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='A-Solution-Backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();$('backupStatus').textContent='Backup डाउनलोड सुरू झाले. Downloads फोल्डर तपासा.';setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},60000)}
 $('backupBtn').addEventListener('click',downloadBackup);
-function downloadWordBackup(){
-  const esc=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
-  const rows=products.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.party)}</td><td>${esc(x.name)}</td><td>${esc(x.rate)}</td><td>${esc(x.unit)}</td></tr>`).join('');
-  const partyRows=parties.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td>${esc(p.mobile||'')}</td></tr>`).join('');
-  const html=`<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:Arial,sans-serif}h1,h2{text-align:center}table{border-collapse:collapse;width:100%;margin-bottom:24px}th,td{border:1px solid #444;padding:6px;text-align:left}th{background:#dbeafe}</style></head><body><h1>A Solution - Backup Report</h1><p>Exported: ${new Date().toLocaleString()}</p><h2>Party List (${parties.length})</h2><table><tr><th>No.</th><th>Party Name</th><th>Mobile</th></tr>${partyRows||'<tr><td colspan="3">No parties saved</td></tr>'}</table><h2>Product & Rate List (${products.length})</h2><table><tr><th>No.</th><th>Party Name</th><th>Product</th><th>Rate (₹)</th><th>Unit</th></tr>${rows||'<tr><td colspan="5">No products saved</td></tr>'}</table></body></html>`;
-  const blob=new Blob(['\ufeff',html],{type:'application/msword;charset=utf-8'});
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='A-Solution-Backup-'+new Date().toISOString().slice(0,10)+'.doc';document.body.appendChild(a);a.click();a.remove();
-  $('backupStatus').textContent='Word Backup (.doc) तयार आहे. Downloads फोल्डर तपासा. ही फाइल Microsoft Word किंवा Google Docs मध्ये उघडता येईल.';
-  setTimeout(()=>URL.revokeObjectURL(url),60000);
-}
+function downloadWordBackup(){const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),rows=products.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.party)}</td><td>${esc(x.name)}</td><td>${esc(x.rate)}</td><td>${esc(x.unit)}</td></tr>`).join(''),partyRows=parties.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td>${esc(p.mobile||'')}</td></tr>`).join(''),doc=`<!doctype html><html><head><meta charset="utf-8"></head><body><h1>A Solution - Backup Report</h1><h2>Party List</h2><table border="1"><tr><th>No.</th><th>Party</th><th>Mobile</th></tr>${partyRows}</table><h2>Product & Rate List</h2><table border="1"><tr><th>No.</th><th>Party</th><th>Product</th><th>Rate</th><th>Unit</th></tr>${rows}</table></body></html>`,blob=new Blob(['\ufeff',doc],{type:'application/msword;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='A-Solution-Backup.doc';document.body.appendChild(a);a.click();a.remove();$('backupStatus').textContent='Word Backup तयार आहे.';setTimeout(()=>URL.revokeObjectURL(url),60000)}
 $('wordBackupBtn').addEventListener('click',downloadWordBackup);
-$('restoreFile').addEventListener('change',async e=>{
- const file=e.target.files&&e.target.files[0];if(!file)return;
- try{const d=JSON.parse(await file.text());if(!Array.isArray(d.parties)||!Array.isArray(d.products))throw new Error('invalid');
-  if(!confirm('सध्याची माहिती बदलून Backup मधील '+d.parties.length+' Party आणि '+d.products.length+' Products Restore करायचे? आधी सध्याचा Backup घ्या.')){e.target.value='';return;}
-  parties=d.parties;products=d.products;persist();$('backupStatus').textContent='Backup Restore झाला.';alert('Backup मधील माहिती Restore झाली.');
- }catch(err){alert('ही योग्य A Solution Backup फाइल नाही.');}e.target.value='';
-});
+$('restoreFile').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{const d=JSON.parse(await file.text());if(!Array.isArray(d.parties)||!Array.isArray(d.products))throw new Error('invalid');if(!confirm('सध्याची माहिती बदलून Backup मधील माहिती Restore करायची? आधी सध्याचा Backup घ्या.')){e.target.value='';return}parties=d.parties;products=d.products;persist();$('backupStatus').textContent='Backup Restore झाला.';alert('Backup मधील माहिती Restore झाली.')}catch(err){alert('ही योग्य A Solution Backup फाइल नाही.')}e.target.value=''});
 render();
 </script></body></html>
